@@ -1,21 +1,27 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const { body, validationResult } = require('express-validator');
-const { signout, signup, signin,isSignedIn } = require("../controllers/auth");
+const { check, validationResult } = require("express-validator");
+const { signout, signup, signin, isSignedIn } = require("../controllers/auth");
+
+router.post(
+  "/signup",
+  [
+    check("name", "name should be at least 3 char").isLength({ min: 3 }),
+    check("email", "email is required").isEmail(),
+    check("password", "password should be at least 3 char").isLength({ min: 3 })
+  ],
+  signup
+);
+
+router.post(
+  "/signin",
+  [
+    check("email", "email is required").isEmail(),
+    check("password", "password field is required").isLength({ min: 1 })
+  ],
+  signin
+);
+
 router.get("/signout", signout);
-router.post("/signup", [
-    body('name').isLength({ min: 3 }).withMessage("Minimun three char required"),
-    body('email', "valid Email is required").isEmail(),
-    body("password").isLength({min:6}).withMessage("Password should be minimun six letters are required")
-], signup);
-
-router.post("/signin", [
-    body('email', "valid Email is required").isEmail(),
-    body("password").isLength({ min: 1 }).withMessage("Password is required")
-], signin);
-
-// router.get("/test", isSignedIn, (req, res) => {
-//     res.send("Protected Route");
-// })
 
 module.exports = router;
