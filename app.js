@@ -18,7 +18,7 @@ const paymentBRoutes = require("./routes/paymentBRoutes");
 
 //DB Connection
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(process.env.DATABASE || "mongodb://localhost:27017/tshirt", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
