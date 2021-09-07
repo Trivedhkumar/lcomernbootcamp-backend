@@ -6,6 +6,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 
 //My routes
 const authRoutes = require("./routes/auth");
@@ -42,6 +43,15 @@ app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", paymentBRoutes);
+
+//server static assets if in production
+if(process.env.NODE_ENV === "production"){
+  //Set static folder
+  app.use(express.static('client/build'))
+  app.get("*",(req,res)=>{
+    res.send(path.resolve(__dirname,"client","build","index.html"))
+  })
+}
 
 //PORT
 const port = process.env.PORT || 8000;
